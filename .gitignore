@@ -1,0 +1,20 @@
+# Dépendances installées par npm (recréées avec `npm install`)
+node_modules/
+
+# Version compilée générée par `npm run build`
+dist/
+
+# Fichiers d'environnement : ne jamais versionner de secrets
+.env
+.env.*
+
+# Journaux et fichiers système
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+
+# Réglages personnels d'éditeur
+.vscode/*
+!.vscode/extensions.json
+.idea/

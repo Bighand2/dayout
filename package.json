@@ -1,0 +1,19 @@
+{
+  "name": "dayout",
+  "version": "0.1.0",
+  "description": "Générateur de sorties à petit budget à Paris.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "vite": "8.3.2"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
