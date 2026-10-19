@@ -13,7 +13,7 @@ L'objectif n'est pas d'afficher un catalogue de lieux, mais de proposer un **par
 | Étape | Contenu | Statut |
 |---|---|---|
 | 1 | Base du projet, modèle de données, catalogue de démonstration validé et testé | ✅ Terminé |
-| 2 | Moteur de génération des sorties (fonction pure et testée) | ⏳ À venir |
+| 2 | Moteur de génération des sorties (fonction pure et testée) | ✅ Terminé |
 | 3 | Interface : page d'accueil, formulaire, page de résultats, responsive | ⏳ À venir |
 | 4 | Finitions de la V1 : accessibilité, cas limites, mise en ligne | ⏳ À venir |
 
@@ -52,6 +52,7 @@ Ouvrir ensuite l'adresse affichée dans le terminal (par défaut http://localhos
 | Commande | Effet |
 |---|---|
 | `npm test` | Lance les tests automatisés |
+| `npm run demo` | Génère deux sorties dans le terminal (préférences modifiables dans `scripts/demo-generator.js`) |
 | `npm run build` | Produit la version optimisée dans `dist/` |
 | `npm run preview` | Sert localement la version de `dist/` pour la vérifier |
 
@@ -67,14 +68,22 @@ Ouvrir ensuite l'adresse affichée dans le terminal (par défaut http://localhos
 │   ├── main.js                   Point d'entrée : relie les données et l'interface
 │   ├── config/
 │   │   ├── categories.js         Catégories, types de coût, publics (codes et libellés)
-│   │   └── paris.js              Centres des arrondissements, limites de Paris
-│   └── data/
-│       ├── activitySchema.js     Validation d'une activité et du catalogue
-│       └── activityRepository.js Chargement des activités (seul module qui connaît la source)
+│   │   ├── paris.js              Centres des arrondissements, limites de Paris
+│   │   └── transport.js          Hypothèses de trajet (vitesses, ticket de métro)
+│   ├── data/
+│   │   ├── activitySchema.js     Validation d'une activité et du catalogue
+│   │   └── activityRepository.js Chargement des activités (seul module qui connaît la source)
+│   └── engine/
+│       ├── generator.js          Générateur de sorties (fonction pure)
+│       ├── preferences.js        Validation des préférences de l'utilisateur
+│       ├── geo.js                Distances et estimation des trajets
+│       └── random.js             Hasard reproductible (tests) et tirage pondéré
+├── scripts/
+│   └── demo-generator.js         Essai du générateur dans le terminal (`npm run demo`)
 └── tests/                        Tests automatisés (node:test)
 ```
 
-Les dossiers `src/engine/` (générateur), `src/ui/` (interface) et `src/styles/` seront ajoutés aux étapes suivantes.
+Les dossiers `src/ui/` (interface) et `src/styles/` seront ajoutés à l'étape suivante.
 
 ## Modèle de données
 
@@ -119,15 +128,34 @@ Chaque activité du fichier `public/data/activities.json` suit ce format :
 
 Une activité invalide n'empêche pas le site de fonctionner : elle est ignorée, et un avertissement apparaît dans la console du navigateur.
 
-## Règles prévues pour le générateur
+## Le générateur de sorties
 
-- **Budget : contrainte stricte.** La somme des prix hauts (`max_eur`) et des éventuels tickets de métro ne dépasse jamais le budget par personne.
-- **Temps.** La somme des durées minimales et des trajets estimés tient dans le temps disponible.
-- **Prix inconnu.** L'activité est exclue, car le budget ne pourrait pas être garanti.
-- **Localisation.** L'arrondissement choisi est privilégié. Si les activités y sont trop peu nombreuses, la recherche s'élargit aux secteurs voisins, et l'interface le signale.
-- **Proximité.** Les étapes sont ordonnées pour limiter les déplacements, estimés à partir des coordonnées (à vol d'oiseau, avec un coefficient de détour).
-- **Ordre logique.** Le repas est de préférence placé dans les dernières étapes, sans que ce soit obligatoire.
-- **Variété.** Le générateur évite les doublons et propose une autre combinaison à chaque nouvelle génération.
+Le générateur (`src/engine/generator.js`) est une **fonction pure** : il reçoit le catalogue et les préférences, et renvoie une sortie ou la raison de l'échec. Il ne touche ni à la page ni au réseau, ce qui permet de le tester et de le réutiliser tel quel sur un serveur.
+
+### Algorithme
+
+1. **Filtrer** les activités compatibles : catégories choisies, public (seul, couple, amis), prix connu, prix haut dans le budget, durée minimale dans le temps disponible.
+2. **Réduire** à un vivier de 16 activités environ : les plus proches de l'arrondissement choisi, ou tirées au hasard s'il n'y en a pas. Chaque catégorie choisie y est représentée.
+3. **Énumérer** toutes les combinaisons de 1 à 4 activités. Une combinaison qui dépasse déjà le budget ou le temps n'est pas agrandie (élagage).
+4. **Ordonner** chaque combinaison : on teste tous les ordres possibles et on garde le trajet le plus court qui respecte encore budget et temps, trajets compris. Un repas placé en fin de parcours reçoit un bonus.
+5. **Noter** chaque sortie : nombre d'étapes visé, envies servies, temps bien utilisé, trajets courts, proximité de l'arrondissement, activités déjà proposées juste avant.
+6. **Choisir** par tirage pondéré parmi les meilleures : la mieux notée sort environ 2 fois sur 3, ce qui varie les propositions sans dégrader leur qualité.
+
+### Règles
+
+| Règle | Fonctionnement |
+|---|---|
+| **Budget** (strict) | Somme des prix hauts (`max_eur`) + tickets de métro ≤ budget par personne |
+| **Temps** (strict) | Somme des durées minimales + trajets estimés ≤ temps disponible |
+| **Nombre d'étapes** | Moins de 2 h : 1 à 2 ; de 2 h à 4 h : 2 à 3 ; plus de 4 h : 3 à 4. Une seule étape est proposée (et signalée) si c'est la seule possibilité |
+| **Variété** | Des catégories différentes sont privilégiées, mais une catégorie peut se répéter ; jamais deux fois la même activité |
+| **Repas** | Si la nourriture est cochée et possible, la sortie contient un repas, de préférence en dernière étape |
+| **Localisation** | L'arrondissement choisi est privilégié ; les étapes situées ailleurs sont signalées |
+| **Trajets** | Estimés à vol d'oiseau × 1,3 : à pied jusqu'à 1,5 km, sinon métro (ticket à 2,55 €, gratuit avec un pass Navigo) |
+| **Prix inconnu** | Activité exclue, car le budget ne pourrait pas être garanti |
+| **Échec** | Le générateur renvoie un code (`BUDGET_TOO_LOW`, `TIME_TOO_SHORT`…) avec, si possible, le budget ou la durée minimale nécessaire |
+
+Les poids de la note (`SCORE_WEIGHTS`) et les réglages (`GENERATOR_SETTINGS`) sont regroupés en tête du fichier pour pouvoir ajuster les priorités sans toucher à la logique. Les hypothèses de trajet se trouvent dans `src/config/transport.js`.
 
 ## Sécurité
 
@@ -145,6 +173,8 @@ Mesures déjà en place :
 - Données fictives ; aucune information (prix, horaires, adresse) n'est vérifiée.
 - Pas de gestion des horaires d'ouverture : il faut vérifier qu'un lieu est ouvert avant de s'y rendre.
 - Temps de trajet estimés à vol d'oiseau, sans calcul d'itinéraire réel.
+- Le trajet jusqu'à la première étape n'est pas compté (on ne connaît pas le point de départ exact).
+- L'énumération de toutes les combinaisons convient à un catalogue de quelques centaines d'activités ; au-delà, il faudra présélectionner davantage ou passer à une recherche approchée.
 
 ## Feuille de route après la V1
 
