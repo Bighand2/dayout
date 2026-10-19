@@ -77,6 +77,149 @@
     "is_fictional": true
   },
   {
+    "id": "food-008",
+    "name": "Sandwicherie du Palais",
+    "category": "food",
+    "description": "Sandwichs chauds préparés minute, à emporter dans les jardins voisins.",
+    "cost": { "type": "consumption", "min_eur": 6, "max_eur": 9 },
+    "duration_minutes": { "min": 20, "max": 35 },
+    "location": { "arrondissement": 1, "address": null, "latitude": 48.8615, "longitude": 2.342 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-009",
+    "name": "Crêperie du Sentier",
+    "category": "food",
+    "description": "Galettes de sarrasin et cidre artisanal dans une petite salle.",
+    "cost": { "type": "consumption", "min_eur": 7, "max_eur": 11 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 2, "address": null, "latitude": 48.869, "longitude": 2.346 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-010",
+    "name": "Marché couvert du Haut-Marais",
+    "category": "food",
+    "description": "Marché couvert avec stands de cuisines du monde et tables partagées.",
+    "cost": { "type": "consumption", "min_eur": 8, "max_eur": 13 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 3, "address": null, "latitude": 48.8625, "longitude": 2.363 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-011",
+    "name": "Bouillon Saint-Sulpice",
+    "category": "food",
+    "description": "Cuisine française traditionnelle à petits prix dans une grande salle animée.",
+    "cost": { "type": "consumption", "min_eur": 10, "max_eur": 15 },
+    "duration_minutes": { "min": 45, "max": 60 },
+    "location": { "arrondissement": 6, "address": null, "latitude": 48.8505, "longitude": 2.334 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-012",
+    "name": "Boulangerie du Marché",
+    "category": "food",
+    "description": "Boulangerie de quartier : sandwichs, quiches et pâtisseries à emporter.",
+    "cost": { "type": "consumption", "min_eur": 3, "max_eur": 6 },
+    "duration_minutes": { "min": 15, "max": 30 },
+    "location": { "arrondissement": 7, "address": null, "latitude": 48.8565, "longitude": 2.3065 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-013",
+    "name": "Food court des Champs",
+    "category": "food",
+    "description": "Galerie de restauration rapide : burgers, bowls et desserts.",
+    "cost": { "type": "consumption", "min_eur": 8, "max_eur": 14 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 8, "address": null, "latitude": 48.871, "longitude": 2.305 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-014",
+    "name": "Comptoir à Bao",
+    "category": "food",
+    "description": "Bao à la vapeur garnis de légumes ou de viande, servis au comptoir.",
+    "cost": { "type": "consumption", "min_eur": 6, "max_eur": 10 },
+    "duration_minutes": { "min": 20, "max": 35 },
+    "location": { "arrondissement": 9, "address": null, "latitude": 48.876, "longitude": 2.342 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-015",
+    "name": "Marché couvert de la Gare",
+    "category": "food",
+    "description": "Petit marché couvert : fromages, fruits et plats du jour à emporter.",
+    "cost": { "type": "consumption", "min_eur": 5, "max_eur": 10 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 12, "address": null, "latitude": 48.8475, "longitude": 2.379 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-016",
+    "name": "Crêperie de la Gaîté",
+    "category": "food",
+    "description": "Crêperie bretonne traditionnelle : galettes complètes et crêpes au caramel.",
+    "cost": { "type": "consumption", "min_eur": 8, "max_eur": 13 },
+    "duration_minutes": { "min": 40, "max": 60 },
+    "location": { "arrondissement": 14, "address": null, "latitude": 48.837, "longitude": 2.326 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-017",
+    "name": "Pho du Commerce",
+    "category": "food",
+    "description": "Soupes pho et nems maison dans une petite cantine vietnamienne.",
+    "cost": { "type": "consumption", "min_eur": 9, "max_eur": 13 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 15, "address": null, "latitude": 48.8445, "longitude": 2.293 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-018",
+    "name": "Salon de thé de Passy",
+    "category": "food",
+    "description": "Salon de thé avec pâtisseries maison et formule goûter.",
+    "cost": { "type": "consumption", "min_eur": 6, "max_eur": 11 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 16, "address": null, "latitude": 48.8575, "longitude": 2.283 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-019",
+    "name": "Épicerie italienne des Batignolles",
+    "category": "food",
+    "description": "Épicerie fine qui sert des focaccias et des pâtes fraîches à emporter.",
+    "cost": { "type": "consumption", "min_eur": 7, "max_eur": 12 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 17, "address": null, "latitude": 48.884, "longitude": 2.317 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "food-020",
+    "name": "Guinguette du Bassin",
+    "category": "food",
+    "description": "Guinguette au bord de l'eau : planches à partager et boissons.",
+    "cost": { "type": "consumption", "min_eur": 7, "max_eur": 12 },
+    "duration_minutes": { "min": 45, "max": 75 },
+    "location": { "arrondissement": 19, "address": null, "latitude": 48.8865, "longitude": 2.376 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
     "id": "thrift-001",
     "name": "Friperie Le Grenier",
     "category": "thrift",
@@ -128,6 +271,94 @@
     "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
     "duration_minutes": { "min": 20, "max": 45 },
     "location": { "arrondissement": 5, "address": null, "latitude": 48.8475, "longitude": 2.348 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "thrift-006",
+    "name": "Vintage des Halles",
+    "category": "thrift",
+    "description": "Friperie spécialisée dans le streetwear des années 90. Entrée libre, achats non inclus.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 50 },
+    "location": { "arrondissement": 1, "address": null, "latitude": 48.861, "longitude": 2.3445 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "thrift-007",
+    "name": "Friperie du Sentier",
+    "category": "thrift",
+    "description": "Petite boutique de seconde main tenue par une association. Entrée libre, achats non inclus.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 20, "max": 45 },
+    "location": { "arrondissement": 2, "address": null, "latitude": 48.8675, "longitude": 2.345 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "thrift-008",
+    "name": "Seconde Main Chic",
+    "category": "thrift",
+    "description": "Dépôt-vente de vêtements et accessoires de créateurs. Entrée libre, achats non inclus.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 7, "address": null, "latitude": 48.8545, "longitude": 2.318 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "thrift-009",
+    "name": "Friperie Pigalle Sud",
+    "category": "thrift",
+    "description": "Friperie aux pièces sélectionnées : vestes en cuir, jeans et sneakers. Entrée libre, achats non inclus.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 9, "address": null, "latitude": 48.88, "longitude": 2.338 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "thrift-010",
+    "name": "Ressourcerie Convention",
+    "category": "thrift",
+    "description": "Ressourcerie solidaire : vêtements, livres et vaisselle d'occasion. Entrée libre, achats non inclus.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 15, "address": null, "latitude": 48.837, "longitude": 2.296 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "thrift-011",
+    "name": "Dépôt-vente de Passy",
+    "category": "thrift",
+    "description": "Dépôt-vente de vêtements de marque d'occasion. Entrée libre, achats non inclus.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 16, "address": null, "latitude": 48.8565, "longitude": 2.279 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "thrift-012",
+    "name": "Friperie des Batignolles",
+    "category": "thrift",
+    "description": "Friperie de quartier spécialisée dans les pulls et les manteaux. Entrée libre, achats non inclus.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 17, "address": null, "latitude": 48.885, "longitude": 2.32 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "thrift-013",
+    "name": "Ressourcerie de Ménilmontant",
+    "category": "thrift",
+    "description": "Grande ressourcerie : vêtements, meubles et vinyles d'occasion. Entrée libre, achats non inclus.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 20, "address": null, "latitude": 48.866, "longitude": 2.392 },
     "suitable_for": ["solo", "couple", "friends"],
     "is_fictional": true
   },
@@ -187,6 +418,72 @@
     "is_fictional": true
   },
   {
+    "id": "gaming-006",
+    "name": "Manga Café Kanji",
+    "category": "gaming",
+    "description": "Café manga avec bornes de jeux vidéo et consoles en libre accès pour les clients.",
+    "cost": { "type": "consumption", "min_eur": 5, "max_eur": 10 },
+    "duration_minutes": { "min": 60, "max": 120 },
+    "location": { "arrondissement": 1, "address": null, "latitude": 48.865, "longitude": 2.34 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "gaming-007",
+    "name": "Escape room Le Coffre",
+    "category": "gaming",
+    "description": "Jeu d'évasion en équipe : une heure pour résoudre les énigmes d'une salle des coffres.",
+    "cost": { "type": "ticket", "min_eur": 18, "max_eur": 25 },
+    "duration_minutes": { "min": 60, "max": 75 },
+    "location": { "arrondissement": 3, "address": null, "latitude": 48.8645, "longitude": 2.362 },
+    "suitable_for": ["couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "gaming-008",
+    "name": "Bar Arcade Ping",
+    "category": "gaming",
+    "description": "Bar équipé de bornes d'arcade et de flippers, jetons à l'unité.",
+    "cost": { "type": "consumption", "min_eur": 5, "max_eur": 12 },
+    "duration_minutes": { "min": 60, "max": 120 },
+    "location": { "arrondissement": 9, "address": null, "latitude": 48.881, "longitude": 2.336 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "gaming-009",
+    "name": "Le Pion Bleu",
+    "category": "gaming",
+    "description": "Bar à jeux de société au bord du bassin : droit de jeu à la journée.",
+    "cost": { "type": "ticket", "min_eur": 4, "max_eur": 7 },
+    "duration_minutes": { "min": 90, "max": 150 },
+    "location": { "arrondissement": 19, "address": null, "latitude": 48.884, "longitude": 2.372 },
+    "suitable_for": ["couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "gaming-010",
+    "name": "Ludothèque du Gros-Caillou",
+    "category": "gaming",
+    "description": "Ludothèque municipale gratuite : jeux de société et consoles sur place.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 60, "max": 120 },
+    "location": { "arrondissement": 7, "address": null, "latitude": 48.8545, "longitude": 2.311 },
+    "suitable_for": ["solo", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "gaming-011",
+    "name": "Laser game du Front de Seine",
+    "category": "gaming",
+    "description": "Parties de laser game en équipe dans un labyrinthe sur deux niveaux.",
+    "cost": { "type": "ticket", "min_eur": 12, "max_eur": 18 },
+    "duration_minutes": { "min": 45, "max": 60 },
+    "location": { "arrondissement": 15, "address": null, "latitude": 48.847, "longitude": 2.288 },
+    "suitable_for": ["friends"],
+    "is_fictional": true
+  },
+  {
     "id": "culture-001",
     "name": "Musée des Arts Urbains",
     "category": "culture",
@@ -242,6 +539,72 @@
     "is_fictional": true
   },
   {
+    "id": "culture-006",
+    "name": "Galerie des Passages",
+    "category": "culture",
+    "description": "Galerie d'illustration installée dans un passage couvert, entrée libre.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 1, "address": null, "latitude": 48.864, "longitude": 2.339 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "culture-007",
+    "name": "Librairie-galerie du Livre ancien",
+    "category": "culture",
+    "description": "Exposition de gravures et de livres anciens en accès libre.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 20, "max": 40 },
+    "location": { "arrondissement": 6, "address": null, "latitude": 48.851, "longitude": 2.3305 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "culture-008",
+    "name": "Musée des Petites Machines",
+    "category": "culture",
+    "description": "Collection d'automates et de mécanismes anciens, démonstrations à heures fixes.",
+    "cost": { "type": "ticket", "min_eur": 6, "max_eur": 9 },
+    "duration_minutes": { "min": 60, "max": 90 },
+    "location": { "arrondissement": 7, "address": null, "latitude": 48.858, "longitude": 2.315 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "culture-009",
+    "name": "Galerie Haussmann Photo",
+    "category": "culture",
+    "description": "Galerie de photographie contemporaine, expositions renouvelées chaque mois.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 45 },
+    "location": { "arrondissement": 8, "address": null, "latitude": 48.874, "longitude": 2.315 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "culture-010",
+    "name": "Fondation d'art du 14e",
+    "category": "culture",
+    "description": "Fondation d'art contemporain aux expositions gratuites, dans un bâtiment de verre.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 45, "max": 75 },
+    "location": { "arrondissement": 14, "address": null, "latitude": 48.8335, "longitude": 2.329 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "culture-011",
+    "name": "Musée de l'Affiche",
+    "category": "culture",
+    "description": "Musée consacré aux affiches publicitaires et de cinéma.",
+    "cost": { "type": "ticket", "min_eur": 7, "max_eur": 10 },
+    "duration_minutes": { "min": 60, "max": 90 },
+    "location": { "arrondissement": 16, "address": null, "latitude": 48.863, "longitude": 2.288 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
     "id": "sport-001",
     "name": "Bloc Factory",
     "category": "sport",
@@ -286,6 +649,50 @@
     "is_fictional": true
   },
   {
+    "id": "sport-005",
+    "name": "Boulodrome du square",
+    "category": "sport",
+    "description": "Terrains de pétanque en accès libre : des joueurs prêtent parfois des boules.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 5, "address": null, "latitude": 48.8452, "longitude": 2.3525 },
+    "suitable_for": ["couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "sport-006",
+    "name": "Parcours sportif du quartier",
+    "category": "sport",
+    "description": "Agrès en plein air et parcours de course en accès libre.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 12, "address": null, "latitude": 48.838, "longitude": 2.395 },
+    "suitable_for": ["solo", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "sport-007",
+    "name": "Piscine Vaugirard",
+    "category": "sport",
+    "description": "Piscine municipale avec bassin de 25 mètres.",
+    "cost": { "type": "ticket", "min_eur": 3, "max_eur": 5 },
+    "duration_minutes": { "min": 45, "max": 75 },
+    "location": { "arrondissement": 15, "address": null, "latitude": 48.838, "longitude": 2.3 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "sport-008",
+    "name": "Terrain de basket des Rails",
+    "category": "sport",
+    "description": "Terrain de basket en accès libre : matchs improvisés en fin de journée.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 90 },
+    "location": { "arrondissement": 17, "address": null, "latitude": 48.889, "longitude": 2.314 },
+    "suitable_for": ["solo", "friends"],
+    "is_fictional": true
+  },
+  {
     "id": "cinema-001",
     "name": "Ciné Quartier Latin",
     "category": "cinema",
@@ -319,6 +726,50 @@
     "is_fictional": true
   },
   {
+    "id": "cinema-004",
+    "name": "Grand Écran des Champs",
+    "category": "cinema",
+    "description": "Grand cinéma multisalle qui diffuse les dernières sorties.",
+    "cost": { "type": "ticket", "min_eur": 10, "max_eur": 14 },
+    "duration_minutes": { "min": 110, "max": 140 },
+    "location": { "arrondissement": 8, "address": null, "latitude": 48.8715, "longitude": 2.302 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "cinema-005",
+    "name": "Ciné Quai de Seine",
+    "category": "cinema",
+    "description": "Cinéma au bord de la Seine avec une séance étudiante en milieu de journée.",
+    "cost": { "type": "ticket", "min_eur": 8, "max_eur": 12 },
+    "duration_minutes": { "min": 110, "max": 140 },
+    "location": { "arrondissement": 12, "address": null, "latitude": 48.8335, "longitude": 2.385 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "cinema-006",
+    "name": "Cinéma du Bassin",
+    "category": "cinema",
+    "description": "Cinéma des deux rives du bassin, avec des avant-premières régulières.",
+    "cost": { "type": "ticket", "min_eur": 7, "max_eur": 10 },
+    "duration_minutes": { "min": 110, "max": 140 },
+    "location": { "arrondissement": 19, "address": null, "latitude": 48.8855, "longitude": 2.374 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "cinema-007",
+    "name": "Ciné Denfert",
+    "category": "cinema",
+    "description": "Cinéma de quartier à deux salles, tarif réduit pour les moins de 26 ans.",
+    "cost": { "type": "ticket", "min_eur": 6, "max_eur": 9 },
+    "duration_minutes": { "min": 100, "max": 130 },
+    "location": { "arrondissement": 14, "address": null, "latitude": 48.8335, "longitude": 2.332 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
     "id": "shows-001",
     "name": "Scène ouverte Le Micro",
     "category": "shows",
@@ -348,6 +799,72 @@
     "cost": { "type": "ticket", "min_eur": 10, "max_eur": 15 },
     "duration_minutes": { "min": 75, "max": 90 },
     "location": { "arrondissement": 9, "address": null, "latitude": 48.879, "longitude": 2.34 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "shows-004",
+    "name": "Café-théâtre des Boulevards",
+    "category": "shows",
+    "description": "Petite salle de café-théâtre qui programme des comédies et des seuls-en-scène.",
+    "cost": { "type": "ticket", "min_eur": 10, "max_eur": 15 },
+    "duration_minutes": { "min": 70, "max": 90 },
+    "location": { "arrondissement": 2, "address": null, "latitude": 48.8705, "longitude": 2.344 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "shows-005",
+    "name": "Scène slam de la Cité",
+    "category": "shows",
+    "description": "Soirée de slam et de poésie dans un bar, participation libre au chapeau.",
+    "cost": { "type": "consumption", "min_eur": 0, "max_eur": 5 },
+    "duration_minutes": { "min": 60, "max": 90 },
+    "location": { "arrondissement": 4, "address": null, "latitude": 48.856, "longitude": 2.354 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "shows-006",
+    "name": "Cabaret d'impro de la Gaîté",
+    "category": "shows",
+    "description": "Spectacle d'improvisation où le public propose les thèmes.",
+    "cost": { "type": "ticket", "min_eur": 8, "max_eur": 12 },
+    "duration_minutes": { "min": 75, "max": 90 },
+    "location": { "arrondissement": 14, "address": null, "latitude": 48.8385, "longitude": 2.3235 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "shows-007",
+    "name": "Café-concert des Ternes",
+    "category": "shows",
+    "description": "Concerts acoustiques dans un café, consommation obligatoire.",
+    "cost": { "type": "consumption", "min_eur": 5, "max_eur": 10 },
+    "duration_minutes": { "min": 75, "max": 105 },
+    "location": { "arrondissement": 17, "address": null, "latitude": 48.88, "longitude": 2.296 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "shows-008",
+    "name": "Cabaret de la Butte",
+    "category": "shows",
+    "description": "Petit cabaret de chansons et de numéros comiques au pied de la butte.",
+    "cost": { "type": "ticket", "min_eur": 10, "max_eur": 15 },
+    "duration_minutes": { "min": 75, "max": 90 },
+    "location": { "arrondissement": 18, "address": null, "latitude": 48.8865, "longitude": 2.3405 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "shows-009",
+    "name": "Scène ouverte de Ménilmontant",
+    "category": "shows",
+    "description": "Scène ouverte de musique et d'humour, participation au chapeau.",
+    "cost": { "type": "consumption", "min_eur": 0, "max_eur": 5 },
+    "duration_minutes": { "min": 90, "max": 120 },
+    "location": { "arrondissement": 20, "address": null, "latitude": 48.868, "longitude": 2.388 },
     "suitable_for": ["solo", "couple", "friends"],
     "is_fictional": true
   },
@@ -403,6 +920,94 @@
     "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
     "duration_minutes": { "min": 30, "max": 60 },
     "location": { "arrondissement": 4, "address": null, "latitude": 48.852, "longitude": 2.353 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "nature-006",
+    "name": "Jardin des Arcades",
+    "category": "nature",
+    "description": "Jardin classique bordé d'arcades, avec bancs et fontaine.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 1, "address": null, "latitude": 48.8635, "longitude": 2.333 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "nature-007",
+    "name": "Grande pelouse face à la tour",
+    "category": "nature",
+    "description": "Vaste pelouse avec vue sur la tour Eiffel, idéale pour un pique-nique.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 75 },
+    "location": { "arrondissement": 7, "address": null, "latitude": 48.8556, "longitude": 2.3 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "nature-008",
+    "name": "Parc aux Colonnades",
+    "category": "nature",
+    "description": "Parc à l'anglaise avec colonnades, pont de pierre et grandes pelouses.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 8, "address": null, "latitude": 48.8795, "longitude": 2.309 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "nature-009",
+    "name": "Parc du Sud",
+    "category": "nature",
+    "description": "Grand parc vallonné avec lac, cascade et kiosque à musique.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 45, "max": 75 },
+    "location": { "arrondissement": 14, "address": null, "latitude": 48.8215, "longitude": 2.338 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "nature-010",
+    "name": "Parc des Anciennes Usines",
+    "category": "nature",
+    "description": "Parc moderne construit sur une ancienne friche industrielle, avec jets d'eau.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 45, "max": 75 },
+    "location": { "arrondissement": 15, "address": null, "latitude": 48.841, "longitude": 2.277 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "nature-011",
+    "name": "Tour du lac du Bois",
+    "category": "nature",
+    "description": "Balade autour d'un lac boisé, avec ses îles et ses barques.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 45, "max": 90 },
+    "location": { "arrondissement": 16, "address": null, "latitude": 48.864, "longitude": 2.26 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "nature-012",
+    "name": "Parc des Rails",
+    "category": "nature",
+    "description": "Parc récent sur d'anciennes voies ferrées, avec bassins et jardins partagés.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 30, "max": 60 },
+    "location": { "arrondissement": 17, "address": null, "latitude": 48.8875, "longitude": 2.3165 },
+    "suitable_for": ["solo", "couple", "friends"],
+    "is_fictional": true
+  },
+  {
+    "id": "nature-013",
+    "name": "Promenade du grand cimetière arboré",
+    "category": "nature",
+    "description": "Allées pavées et arbres centenaires dans un cimetière-jardin à visiter en silence.",
+    "cost": { "type": "free", "min_eur": 0, "max_eur": 0 },
+    "duration_minutes": { "min": 45, "max": 90 },
+    "location": { "arrondissement": 20, "address": null, "latitude": 48.8615, "longitude": 2.3935 },
     "suitable_for": ["solo", "couple", "friends"],
     "is_fictional": true
   }

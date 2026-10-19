@@ -59,7 +59,8 @@ export const FAILURE_REASONS = {
 /** Codes des remarques jointes à une sortie réussie. */
 export const NOTICE_CODES = {
   FEWER_STEPS_THAN_TARGET: 'FEWER_STEPS_THAN_TARGET',
-  OUTSIDE_SELECTED_AREA: 'OUTSIDE_SELECTED_AREA',
+  OUTSIDE_SELECTED_AREA: 'OUTSIDE_SELECTED_AREA', // une partie des étapes est hors de l'arrondissement
+  NO_MATCH_IN_AREA: 'NO_MATCH_IN_AREA', // l'arrondissement n'a aucune activité compatible : tout est à côté
   SOME_INTERESTS_MISSING: 'SOME_INTERESTS_MISSING',
 };
 
@@ -94,17 +95,18 @@ export function generateOuting(activities, rawPreferences, { random = Math.rando
   // 2. Réduire au vivier
   const areaCenter = preferences.arrondissement ? ARRONDISSEMENT_CENTERS[preferences.arrondissement] : null;
   const pool = buildPool(selection.candidates, preferences.categories, areaCenter, random);
+  const areaHasMatch = selection.candidates.some(
+    (activity) => activity.location.arrondissement === preferences.arrondissement,
+  );
 
   // 3. Énumérer les combinaisons (élagage : budget et temps hors trajets)
   const stepTarget = getStepTarget(preferences.availableMinutes);
-  const combinations = enumerateCombinations(pool, stepTarget.max, (combination) =>
-    fitsWithoutTravel(combination, preferences),
-  );
+  const combinations = enumerateCombinations(pool, stepTarget.max, preferences);
 
   // 4. Ordonner chaque combinaison et ne garder que celles qui tiennent, trajets compris
-  const travelBetween = createTravelCache(preferences.hasNavigo);
+  const travelMatrix = buildTravelMatrix(pool, preferences.hasNavigo);
   let outings = combinations
-    .map((combination) => planBestRoute(combination, preferences, travelBetween))
+    .map((combination) => planBestRoute(combination, pool, travelMatrix, preferences))
     .filter((outing) => outing !== null);
 
   // Règle métier : si « nourriture » est cochée et qu'un repas est possible, il est inclus.
@@ -115,7 +117,7 @@ export function generateOuting(activities, rawPreferences, { random = Math.rando
 
   // 5. Noter. (Une activité seule passe toujours le filtre de l'étape 1 :
   //    `outings` contient donc au moins une sortie à ce stade.)
-  const context = { preferences, stepTarget, areaCenter, previousIds: new Set(previousActivityIds) };
+  const context = { preferences, stepTarget, areaCenter, areaHasMatch, previousIds: new Set(previousActivityIds) };
   const ranked = outings
     .map((outing) => ({ outing, score: scoreOuting(outing, context) }))
     .sort((a, b) => b.score - a.score);
@@ -212,87 +214,106 @@ function buildPool(candidates, categories, areaCenter, random) {
 // ---------------------------------------------------------------------------
 
 /**
- * Liste toutes les combinaisons de 1 à `maxSize` éléments du vivier.
- * Chaque activité n'est prise qu'une fois (on avance toujours dans le tableau),
+ * Liste toutes les combinaisons de 1 à `maxSize` activités du vivier.
+ * Une combinaison est un tableau de POSITIONS dans le vivier (ex. : [0, 3, 7]).
+ * Chaque position n'est prise qu'une fois (on avance toujours dans le tableau),
  * donc une sortie ne peut pas contenir deux fois la même activité.
- * Élagage : si une combinaison dépasse déjà les limites, inutile de l'agrandir.
+ * Élagage : on transporte les totaux en cours ; si une combinaison dépasse déjà
+ * le budget ou le temps, inutile de l'agrandir.
  */
-function enumerateCombinations(pool, maxSize, isWithinLimits) {
+function enumerateCombinations(pool, maxSize, { budgetEur, availableMinutes }) {
   const results = [];
   const current = [];
 
-  function explore(startIndex) {
+  function explore(startIndex, costMax, durationMin) {
     for (let index = startIndex; index < pool.length; index++) {
-      current.push(pool[index]);
-      if (isWithinLimits(current)) {
-        results.push([...current]);
-        if (current.length < maxSize) explore(index + 1);
-      }
+      const activity = pool[index];
+      const nextCostMax = costMax + activity.cost.max_eur;
+      const nextDurationMin = durationMin + activity.duration_minutes.min;
+      if (roundCents(nextCostMax) > budgetEur || nextDurationMin > availableMinutes) continue;
+
+      current.push(index);
+      results.push([...current]);
+      if (current.length < maxSize) explore(index + 1, nextCostMax, nextDurationMin);
       current.pop();
     }
   }
 
-  explore(0);
+  explore(0, 0, 0);
   return results;
-}
-
-function fitsWithoutTravel(combination, { budgetEur, availableMinutes }) {
-  const costMax = sum(combination, (activity) => activity.cost.max_eur);
-  const durationMin = sum(combination, (activity) => activity.duration_minutes.min);
-  return roundCents(costMax) <= budgetEur && durationMin <= availableMinutes;
 }
 
 // ---------------------------------------------------------------------------
 // 4. Ordre des étapes
 // ---------------------------------------------------------------------------
 
-/** Mémorise les trajets déjà calculés (le même trajet revient dans beaucoup de combinaisons). */
-function createTravelCache(hasNavigo) {
-  const cache = new Map();
-  return (from, to) => {
-    const key = `${from.id}>${to.id}`;
-    if (!cache.has(key)) cache.set(key, estimateTravel(from.location, to.location, { hasNavigo }));
-    return cache.get(key);
-  };
+/**
+ * Table des trajets entre toutes les activités du vivier : travelMatrix[i][j]
+ * est le trajet de la i-ème à la j-ème. Calculée une fois (16 × 16 = 256 trajets),
+ * puis relue des dizaines de milliers de fois pendant la recherche du meilleur ordre.
+ */
+function buildTravelMatrix(pool, hasNavigo) {
+  return pool.map((from) => pool.map((to) => estimateTravel(from.location, to.location, { hasNavigo })));
 }
+
+/**
+ * Tous les ordres possibles de 1, 2, 3 ou 4 étapes, calculés une seule fois au
+ * chargement du module : INDEX_PERMUTATIONS[2] contient les 6 ordres de [0, 1, 2].
+ */
+const INDEX_PERMUTATIONS = Array.from({ length: GENERATOR_SETTINGS.maxSteps }, (_, index) =>
+  permutations([...Array(index + 1).keys()]),
+);
 
 /**
  * Teste tous les ordres possibles (au plus 4! = 24) et garde le meilleur qui
  * respecte les contraintes, trajets compris. Renvoie null si aucun ordre ne convient.
+ * @param {number[]} combination positions des activités dans le vivier
  */
-function planBestRoute(combination, { budgetEur, availableMinutes }, travelBetween) {
+function planBestRoute(combination, pool, travelMatrix, { budgetEur, availableMinutes }) {
   // Ces totaux ne dépendent pas de l'ordre : on les calcule une seule fois.
-  const activitiesCostMax = sum(combination, (activity) => activity.cost.max_eur);
-  const activitiesDurationMin = sum(combination, (activity) => activity.duration_minutes.min);
+  const activitiesCostMax = sum(combination, (index) => pool[index].cost.max_eur);
+  const activitiesDurationMin = sum(combination, (index) => pool[index].duration_minutes.min);
+  const lastStep = combination.length - 1;
 
   let bestOrder = null;
   let bestOrderCost = Infinity;
 
-  for (const order of permutations(combination)) {
+  for (const permutation of INDEX_PERMUTATIONS[lastStep]) {
+    const order = permutation.map((position) => combination[position]);
+
     let travelMinutes = 0;
     let transportCostEur = 0;
-    for (let index = 1; index < order.length; index++) {
-      const leg = travelBetween(order[index - 1], order[index]);
-      travelMinutes += leg.minutes;
-      transportCostEur += leg.costEur;
+    let foodBonus = 0;
+    for (let step = 0; step < order.length; step++) {
+      if (step > 0) {
+        const leg = travelMatrix[order[step - 1]][order[step]];
+        travelMinutes += leg.minutes;
+        transportCostEur += leg.costEur;
+      }
+      // Plus un repas est placé tard, plus le bonus est grand (maximum en dernière étape).
+      if (lastStep > 0 && pool[order[step]].category === 'food') {
+        foodBonus += (GENERATOR_SETTINGS.foodLateBonusMinutes * step) / lastStep;
+      }
     }
 
     const fitsBudget = roundCents(activitiesCostMax + transportCostEur) <= budgetEur;
     const fitsTime = activitiesDurationMin + travelMinutes <= availableMinutes;
     if (!fitsBudget || !fitsTime) continue;
 
-    const orderCost = travelMinutes - foodLateBonus(order);
+    const orderCost = travelMinutes - foodBonus;
     if (orderCost < bestOrderCost) {
       bestOrder = order;
       bestOrderCost = orderCost;
     }
   }
 
-  return bestOrder === null ? null : describeRoute(bestOrder, travelBetween);
+  return bestOrder === null ? null : describeRoute(bestOrder, pool, travelMatrix);
 }
 
-function describeRoute(order, travelBetween) {
-  const legs = order.map((activity, index) => (index === 0 ? null : travelBetween(order[index - 1], activity)));
+/** Construit la description complète d'une sortie à partir de l'ordre retenu (positions dans le vivier). */
+function describeRoute(orderIndices, pool, travelMatrix) {
+  const order = orderIndices.map((index) => pool[index]);
+  const legs = orderIndices.map((index, step) => (step === 0 ? null : travelMatrix[orderIndices[step - 1]][index]));
   const travelMinutes = sum(legs, (leg) => leg?.minutes ?? 0);
   const transportCostEur = roundCents(sum(legs, (leg) => leg?.costEur ?? 0));
   const activitiesCostMinEur = sum(order, (activity) => activity.cost.min_eur);
@@ -312,15 +333,7 @@ function describeRoute(order, travelBetween) {
   };
 }
 
-/** Plus un repas est placé tard dans le parcours, plus le bonus est grand (maximum en dernière étape). */
-function foodLateBonus(order) {
-  if (order.length < 2) return 0;
-  const lastIndex = order.length - 1;
-  return sum(order, (activity, index) =>
-    activity.category === 'food' ? (GENERATOR_SETTINGS.foodLateBonusMinutes * index) / lastIndex : 0,
-  );
-}
-
+/** Tous les ordres possibles d'un petit tableau (récursif : chaque élément en tête, puis les ordres du reste). */
 function permutations(items) {
   if (items.length <= 1) return [items];
   return items.flatMap((item, index) => {
@@ -379,7 +392,7 @@ function scoreOuting(outing, { preferences, stepTarget, areaCenter, previousIds 
 // 6. Résultat
 // ---------------------------------------------------------------------------
 
-function buildResult(outing, { preferences, stepTarget }) {
+function buildResult(outing, { preferences, stepTarget, areaHasMatch }) {
   const { arrondissement, categories, availableMinutes } = preferences;
 
   const steps = outing.activities.map((activity, index) => ({
@@ -393,7 +406,11 @@ function buildResult(outing, { preferences, stepTarget }) {
   if (steps.length < stepTarget.min) {
     notices.push({ code: NOTICE_CODES.FEWER_STEPS_THAN_TARGET, stepCount: steps.length, targetMin: stepTarget.min });
   }
-  if (steps.some((step) => step.isOutsideArea)) {
+  // Deux cas distincts, pour un message plus clair :
+  // rien de compatible dans l'arrondissement, ou seulement une partie des étapes ailleurs.
+  if (arrondissement !== null && !areaHasMatch) {
+    notices.push({ code: NOTICE_CODES.NO_MATCH_IN_AREA, arrondissement });
+  } else if (steps.some((step) => step.isOutsideArea)) {
     notices.push({ code: NOTICE_CODES.OUTSIDE_SELECTED_AREA, arrondissement });
   }
   const coveredCategories = new Set(outing.activities.map((activity) => activity.category));

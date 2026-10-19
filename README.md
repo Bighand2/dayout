@@ -124,7 +124,7 @@ Chaque activité du fichier `public/data/activities.json` suit ce format :
 ### Ajouter une activité
 
 1. Ajouter un objet dans `public/data/activities.json` en respectant le format ci-dessus.
-2. Lancer `npm test` : le test du catalogue signale toute erreur (champ manquant, prix incohérent, coordonnées hors de Paris, id en double…).
+2. Lancer `npm test` : le test du catalogue signale toute erreur (champ manquant, prix incohérent, coordonnées hors de Paris, id en double…). Il vérifie aussi la couverture : au moins 3 activités par catégorie, et au moins 4 activités par arrondissement dont une gratuite.
 
 Une activité invalide n'empêche pas le site de fonctionner : elle est ignorée, et un avertissement apparaît dans la console du navigateur.
 
@@ -150,7 +150,8 @@ Le générateur (`src/engine/generator.js`) est une **fonction pure** : il reço
 | **Nombre d'étapes** | Moins de 2 h : 1 à 2 ; de 2 h à 4 h : 2 à 3 ; plus de 4 h : 3 à 4. Une seule étape est proposée (et signalée) si c'est la seule possibilité |
 | **Variété** | Des catégories différentes sont privilégiées, mais une catégorie peut se répéter ; jamais deux fois la même activité |
 | **Repas** | Si la nourriture est cochée et possible, la sortie contient un repas, de préférence en dernière étape |
-| **Localisation** | L'arrondissement choisi est privilégié ; les étapes situées ailleurs sont signalées |
+| **Localisation** | L'arrondissement choisi est privilégié ; les étapes situées ailleurs sont signalées (`OUTSIDE_SELECTED_AREA`), avec une remarque spécifique si l'arrondissement n'a aucune activité compatible (`NO_MATCH_IN_AREA`) |
+| **Autre sortie** | L'appelant transmet les activités déjà proposées (`previousActivityIds`) ; elles sont pénalisées pour faire apparaître d'autres combinaisons |
 | **Trajets** | Estimés à vol d'oiseau × 1,3 : à pied jusqu'à 1,5 km, sinon métro (ticket à 2,55 €, gratuit avec un pass Navigo) |
 | **Prix inconnu** | Activité exclue, car le budget ne pourrait pas être garanti |
 | **Échec** | Le générateur renvoie un code (`BUDGET_TOO_LOW`, `TIME_TOO_SHORT`…) avec, si possible, le budget ou la durée minimale nécessaire |

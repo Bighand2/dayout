@@ -139,10 +139,23 @@ test("l'arrondissement choisi est privilégié", () => {
   }
 });
 
-test("signale les étapes hors de l'arrondissement quand il n'y a rien sur place", () => {
+test("signale clairement un arrondissement sans aucune activité compatible", () => {
   const activities = [makeActivity('parc-18', 'nature', { at: [48.8925, 2.3484], arrondissement: 18 })];
   const result = generateOuting(activities, makePreferences({ categories: ['nature'], arrondissement: 11 }));
+  const codes = result.notices.map((notice) => notice.code);
   assert.equal(result.steps[0].isOutsideArea, true);
+  assert.ok(codes.includes(NOTICE_CODES.NO_MATCH_IN_AREA));
+  assert.equal(codes.includes(NOTICE_CODES.OUTSIDE_SELECTED_AREA), false); // un seul message, le plus précis
+});
+
+test("signale les étapes situées hors de l'arrondissement quand il en manque sur place", () => {
+  const activities = [
+    makeActivity('parc-11', 'nature'),
+    makeActivity('cine-18', 'cinema', { at: [48.8925, 2.3484], arrondissement: 18 }),
+  ];
+  const preferences = makePreferences({ categories: ['nature', 'cinema'], arrondissement: 11, budgetEur: 20 });
+  const result = generateOuting(activities, preferences);
+  assert.equal(result.steps.length, 2);
   assert.ok(result.notices.some((notice) => notice.code === NOTICE_CODES.OUTSIDE_SELECTED_AREA));
 });
 

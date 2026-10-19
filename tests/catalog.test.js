@@ -27,6 +27,14 @@ test('le catalogue de démonstration est entièrement marqué comme fictif', () 
   assert.ok(activities.every((activity) => activity.is_fictional === true));
 });
 
+test('chaque arrondissement possède au moins 4 activités, dont une gratuite', () => {
+  for (let arrondissement = 1; arrondissement <= 20; arrondissement++) {
+    const local = activities.filter((activity) => activity.location.arrondissement === arrondissement);
+    assert.ok(local.length >= 4, `${arrondissement}e : ${local.length} activité(s) seulement`);
+    assert.ok(local.some((activity) => activity.cost.max_eur === 0), `${arrondissement}e : aucune activité gratuite`);
+  }
+});
+
 test("le catalogue contient assez d'activités gratuites pour les petits budgets", () => {
   const freeCount = activities.filter((activity) => activity.cost.max_eur === 0).length;
   assert.ok(freeCount >= 8, `${freeCount} activité(s) gratuite(s) seulement`);
