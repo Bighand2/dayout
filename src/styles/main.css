@@ -1,0 +1,855 @@
+/* ==========================================================================
+   DAYOUT : feuille de style
+   Direction artistique « plan de métro » : fond clair, typographie de
+   signalétique, et chaque catégorie d'activité a sa couleur de ligne.
+
+   Organisation :
+   1. Variables (couleurs, espacements…)
+   2. Base
+   3. Mise en page
+   4. Composants : en-tête, boutons, pastilles, cartes, formulaire, ligne de métro…
+   5. Adaptations (écrans larges, animations réduites)
+   ========================================================================== */
+
+/* 1. Variables ------------------------------------------------------------ */
+
+:root {
+  color-scheme: light;
+
+  --color-bg: #ffffff;
+  --color-surface: #f3f5f9;
+  --color-ink: #121826;
+  --color-ink-muted: #4a5568;
+  --color-border: #d5dae3;
+  --color-brand: #0b3d91;
+  --color-brand-dark: #082c69;
+  --color-accent: #ffd23f;
+  --color-error: #b42318;
+  --color-error-bg: #fdecea;
+  --color-info-bg: #eaf1ff;
+  --color-warning-bg: #fff4d6;
+  --color-focus: #0b3d91;
+
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --radius-small: 0.5rem;
+  --radius: 0.875rem;
+  --radius-pill: 999px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+
+  --shadow: 0 1px 2px rgb(18 24 38 / 0.06), 0 4px 16px rgb(18 24 38 / 0.06);
+  --line-width: 0.375rem;
+}
+
+/* Couleur de ligne de chaque catégorie (contraste ≥ 4.5:1 sur fond blanc). */
+[data-category='food'] { --line: #c8372d; --line-tint: #fcebea; }
+[data-category='thrift'] { --line: #7d3c98; --line-tint: #f3eaf7; }
+[data-category='gaming'] { --line: #1f6fb2; --line-tint: #e8f1fa; }
+[data-category='culture'] { --line: #8a5a00; --line-tint: #f8f0e0; }
+[data-category='sport'] { --line: #00796b; --line-tint: #e3f3f1; }
+[data-category='cinema'] { --line: #ad1457; --line-tint: #fbe8f0; }
+[data-category='shows'] { --line: #b93c08; --line-tint: #fdeee6; }
+[data-category='nature'] { --line: #2e7d32; --line-tint: #e9f4ea; }
+
+/* 2. Base ------------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: var(--space-5);
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--color-brand);
+  text-underline-offset: 0.2em;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Contour de focus bien visible pour la navigation au clavier. */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: -3rem;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-brand);
+  color: #fff;
+  border-radius: var(--radius-small);
+  z-index: 10;
+}
+
+.skip-link:focus {
+  top: var(--space-4);
+}
+
+/* 3. Mise en page ------------------------------------------------------------ */
+
+.container {
+  width: 100%;
+  max-width: 68rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.container--narrow {
+  max-width: 46rem;
+}
+
+.section {
+  padding-block: var(--space-7);
+}
+
+.section--results {
+  background: var(--color-surface);
+}
+
+.section__title {
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-weight: 800;
+  margin-bottom: var(--space-2);
+}
+
+.section__title:focus {
+  outline: none;
+}
+
+.section__lead {
+  color: var(--color-ink-muted);
+  margin-bottom: var(--space-5);
+}
+
+/* 4. Composants ---------------------------------------------------------------- */
+
+/* En-tête */
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-ink);
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: 0.06em;
+}
+
+/* Le « D » dans un rond, comme un numéro de ligne. */
+.logo__badge {
+  display: inline-grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  background: var(--color-brand);
+  color: var(--color-accent);
+  font-size: 1.15rem;
+  letter-spacing: 0;
+}
+
+.demo-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-3);
+}
+
+/* Présentation */
+.hero {
+  padding-block: var(--space-7);
+  background:
+    linear-gradient(180deg, var(--color-info-bg), var(--color-bg));
+}
+
+.hero__inner {
+  display: grid;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-brand);
+  margin-bottom: var(--space-3);
+}
+
+.hero__title {
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  font-weight: 900;
+  margin-bottom: var(--space-4);
+}
+
+.hero__lead {
+  font-size: 1.1rem;
+  color: var(--color-ink-muted);
+  max-width: 36rem;
+  margin-bottom: var(--space-5);
+}
+
+/* Illustration : une ligne de métro horizontale avec trois stations. */
+.hero-line {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-5) var(--space-4);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  position: relative;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.hero-line::before {
+  content: '';
+  position: absolute;
+  left: 16.6%;
+  right: 16.6%;
+  top: calc(var(--space-5) + 0.85rem);
+  height: var(--line-width);
+  background: linear-gradient(90deg, #7d3c98 0 50%, #1f6fb2 50% 100%);
+  border-radius: var(--radius-pill);
+}
+
+.hero-line__station {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  position: relative;
+  text-align: center;
+}
+
+.hero-line__dot {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 0.35rem solid var(--line);
+  margin-bottom: var(--space-2);
+}
+
+.hero-line__name {
+  font-weight: 700;
+}
+
+.hero-line__price {
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+/* Boutons */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem; /* cible tactile confortable (≈ 44 px) */
+  padding: var(--space-2) var(--space-5);
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.15s;
+}
+
+.button--primary {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+.button--primary:hover {
+  background: var(--color-brand-dark);
+}
+
+.button--secondary {
+  background: var(--color-bg);
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+}
+
+.button--secondary:hover {
+  background: var(--color-info-bg);
+}
+
+.button--large {
+  min-height: 3.25rem;
+  font-size: 1.05rem;
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Formulaire */
+.form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.field {
+  margin: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  min-width: 0; /* évite qu'un fieldset déborde sur mobile */
+}
+
+.field.is-invalid {
+  border-color: var(--color-error);
+}
+
+.field__legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+  margin-left: calc(-1 * var(--space-2));
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.field__number {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--color-ink);
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.field__hint {
+  display: block;
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-3);
+}
+
+.field-error {
+  margin-top: var(--space-3);
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.field-error::before {
+  content: '⚠ ';
+}
+
+/* Pastilles (boutons radio stylés) : l'input reste présent et focusable,
+   il est seulement rendu invisible ; le style suit son état (:checked, :focus-visible). */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.chip {
+  position: relative;
+}
+
+.chip input,
+.category-card input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.chip__label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  background: var(--color-bg);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.chip:hover .chip__label {
+  border-color: var(--color-brand);
+}
+
+.chip input:checked + .chip__label {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #fff;
+}
+
+.chip input:focus-visible + .chip__label {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.custom-input {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+  max-width: 12rem;
+}
+
+.custom-input label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.custom-input input,
+.select {
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-small);
+  font: inherit;
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+.select {
+  width: 100%;
+  max-width: 20rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem;
+  accent-color: var(--color-brand);
+  flex-shrink: 0;
+}
+
+/* Cartes de catégories : la couleur de la ligne apparaît quand la carte est cochée. */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.category-card {
+  position: relative;
+}
+
+.category-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  height: 100%;
+  padding: var(--space-3);
+  border: 2px solid var(--color-border);
+  border-left: var(--line-width) solid var(--line);
+  border-radius: var(--radius-small);
+  background: var(--color-bg);
+  font-weight: 600;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.category-card__emoji {
+  font-size: 1.5rem;
+}
+
+.category-card:hover .category-card__body {
+  border-color: var(--line);
+}
+
+.category-card input:checked + .category-card__body {
+  border-color: var(--line);
+  background: var(--line-tint);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+/* Coche affichée sur une carte sélectionnée (en plus de la couleur, pour ne pas reposer sur elle seule). */
+.category-card input:checked + .category-card__body::after {
+  content: '✓';
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  font-weight: 900;
+  color: var(--line);
+}
+
+.category-card input:focus-visible + .category-card__body {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.form__actions {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.load-status {
+  color: var(--color-ink-muted);
+}
+
+/* Alertes et remarques */
+.alert {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius);
+  border-left: var(--line-width) solid currentColor;
+}
+
+.alert--error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.alert--empty {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  border-left-color: var(--color-brand);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.alert__title {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.notices {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.notice {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-small);
+  background: var(--color-warning-bg);
+  font-size: 0.95rem;
+}
+
+.notice::before {
+  content: 'ℹ ';
+  font-weight: 700;
+}
+
+/* Résumé de la sortie */
+.summary {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 var(--space-5);
+}
+
+.summary__item {
+  padding: var(--space-4);
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.summary__label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-muted);
+}
+
+.summary__value {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.summary__detail {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+/* Ligne de métro : chaque étape est une station.
+   Le trait vertical de chaque station prend la couleur de sa catégorie,
+   comme une correspondance entre deux lignes. */
+.route {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.station {
+  --gutter: 3.25rem; /* espace à gauche réservé à la ligne */
+  --dot-center: 1.6rem; /* hauteur du centre du rond, depuis le haut de l'arrêt */
+  padding-left: var(--gutter);
+}
+
+/* Deux segments de ligne par station : celui du trajet (au-dessus)
+   et celui de l'arrêt (rond + carte). */
+.station__travel,
+.station__stop {
+  position: relative;
+}
+
+.station__travel::before,
+.station__stop::before {
+  content: '';
+  position: absolute;
+  left: calc(1.05rem - var(--gutter));
+  top: 0;
+  bottom: 0;
+  width: var(--line-width);
+  background: var(--line);
+}
+
+.station__travel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  padding-block: var(--space-1) var(--space-3);
+}
+
+.station__stop {
+  padding-bottom: var(--space-5);
+}
+
+/* La ligne commence au premier rond et s'arrête au dernier. */
+.station:first-child .station__stop::before {
+  top: var(--dot-center);
+}
+
+.station:last-child .station__stop {
+  padding-bottom: 0;
+}
+
+.station:last-child .station__stop::before {
+  bottom: auto;
+  height: var(--dot-center);
+}
+
+.station:only-child .station__stop::before {
+  display: none;
+}
+
+.station__dot {
+  position: absolute;
+  left: calc(0.4rem - var(--gutter));
+  top: 0.75rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 0.375rem solid var(--line);
+  z-index: 1;
+}
+
+.station__card {
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space-4) var(--space-5);
+  border-top: 4px solid var(--line);
+}
+
+.station__step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.station__number {
+  background: var(--line);
+  color: #fff;
+  padding: 0.1rem var(--space-2);
+  border-radius: var(--radius-small);
+}
+
+.station__category {
+  color: var(--line);
+}
+
+.station__name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: var(--space-2);
+}
+
+.station__description {
+  color: var(--color-ink-muted);
+  margin-bottom: var(--space-3);
+}
+
+.station__facts {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-3);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.station__fact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.station__fact-icon {
+  width: 1.4rem;
+  text-align: center;
+}
+
+.station__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  font-weight: 600;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.1rem var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink-muted);
+  border: 1px solid var(--color-border);
+}
+
+.tag--warning {
+  background: var(--color-warning-bg);
+  color: #7a4b00;
+  border-color: #f0d48a;
+}
+
+.disclaimer {
+  margin-top: var(--space-5);
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+.results__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+/* Pied de page */
+.site-footer {
+  padding-block: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+.site-footer p + p {
+  margin-top: var(--space-2);
+}
+
+/* 5. Adaptations ---------------------------------------------------------------- */
+
+@media (min-width: 40rem) {
+  .category-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .summary {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 56rem) {
+  .hero {
+    padding-block: var(--space-8);
+  }
+
+  .hero__inner {
+    grid-template-columns: 1.3fr 1fr;
+    gap: var(--space-7);
+  }
+}
+
+/* Respecte le réglage système « réduire les animations ». */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

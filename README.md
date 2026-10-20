@@ -14,7 +14,7 @@ L'objectif n'est pas d'afficher un catalogue de lieux, mais de proposer un **par
 |---|---|---|
 | 1 | Base du projet, modèle de données, catalogue de démonstration validé et testé | ✅ Terminé |
 | 2 | Moteur de génération des sorties (fonction pure et testée) | ✅ Terminé |
-| 3 | Interface : page d'accueil, formulaire, page de résultats, responsive | ⏳ À venir |
+| 3 | Interface : page d'accueil, formulaire, page de résultats, responsive | ✅ Terminé |
 | 4 | Finitions de la V1 : accessibilité, cas limites, mise en ligne | ⏳ À venir |
 
 ## Stack technique
@@ -65,9 +65,10 @@ Ouvrir ensuite l'adresse affichée dans le terminal (par défaut http://localhos
 │   └── data/
 │       └── activities.json       Catalogue d'activités (démonstration)
 ├── src/
-│   ├── main.js                   Point d'entrée : relie les données et l'interface
+│   ├── main.js                   Point d'entrée : relie données, formulaire, générateur et affichage
 │   ├── config/
 │   │   ├── categories.js         Catégories, types de coût, publics (codes et libellés)
+│   │   ├── formOptions.js        Valeurs proposées dans le formulaire (budgets, durées)
 │   │   ├── paris.js              Centres des arrondissements, limites de Paris
 │   │   └── transport.js          Hypothèses de trajet (vitesses, ticket de métro)
 │   ├── data/
@@ -77,13 +78,29 @@ Ouvrir ensuite l'adresse affichée dans le terminal (par défaut http://localhos
 │       ├── generator.js          Générateur de sorties (fonction pure)
 │       ├── preferences.js        Validation des préférences de l'utilisateur
 │       ├── geo.js                Distances et estimation des trajets
-│       └── random.js             Hasard reproductible (tests) et tirage pondéré
+│   │   └── random.js             Hasard reproductible (tests) et tirage pondéré
+│   ├── ui/
+│   │   ├── form.js               Formulaire : boutons, lecture des choix, erreurs
+│   │   ├── results.js            Affichage de la sortie en « ligne de métro »
+│   │   ├── messages.js           Codes du générateur → phrases pour l'utilisateur
+│   │   ├── format.js             Mise en forme des prix, durées, trajets
+│   │   └── dom.js                Création d'éléments HTML sans innerHTML
+│   └── styles/
+│       └── main.css              Styles (variables, composants, responsive)
 ├── scripts/
 │   └── demo-generator.js         Essai du générateur dans le terminal (`npm run demo`)
 └── tests/                        Tests automatisés (node:test)
 ```
 
-Les dossiers `src/ui/` (interface) et `src/styles/` seront ajoutés à l'étape suivante.
+**Séparation des responsabilités :** `engine/` ne connaît ni la page ni le réseau, `data/` est le seul module qui sait d'où viennent les activités, `ui/` est la seule partie qui touche au HTML. On peut ainsi changer l'interface (ou passer à un framework) sans toucher au générateur, et inversement.
+
+## Interface
+
+Une seule page qui défile : présentation, formulaire, puis résultats. La direction artistique s'inspire d'un **plan de métro** : chaque étape est une station, et chaque catégorie a sa couleur de ligne.
+
+- **Formulaire** : boutons de valeurs prédéfinies (budget avec un montant libre « Autre », temps disponible, public), cartes d'envies à cocher, choix de l'arrondissement et option pass Navigo. Les erreurs s'affichent sous le champ concerné et le focus s'y place.
+- **Résultats** : résumé (budget, durée, nombre d'étapes), remarques du générateur, parcours étape par étape avec les trajets entre deux stations, lien vers la carte OpenStreetMap, bouton « Générer une autre sortie » qui évite toutes les activités déjà proposées depuis la dernière recherche.
+- **Accessibilité** : vrais champs de formulaire (utilisables au clavier et par les lecteurs d'écran), contours de focus visibles, contrastes de texte d'au moins 4,5:1, information jamais portée par la seule couleur, respect du réglage « réduire les animations ».
 
 ## Modèle de données
 
@@ -164,7 +181,9 @@ Mesures déjà en place :
 
 - **Validation par liste blanche** de chaque activité chargée : types, plages de valeurs, codes autorisés. Seuls les champs connus sont conservés.
 - **URL limitées à `https://`**, pour éviter qu'un lien `javascript:` exécute du code au clic (XSS).
-- **Affichage par `textContent`**, jamais par `innerHTML` avec des données : le texte n'est jamais interprété comme du HTML.
+- **Affichage par `textContent`**, jamais par `innerHTML` avec des données : le texte n'est jamais interprété comme du HTML (voir `src/ui/dom.js`).
+- **Liens externes en `rel="noopener noreferrer"`** : la page ouverte ne peut pas agir sur DAYOUT et ne reçoit pas son adresse.
+- **Préférences revalidées** avant chaque génération, même si elles viennent de notre propre formulaire (le module sera réutilisé côté serveur en V2).
 - **Erreurs séparées** : un message clair pour l'utilisateur, et le détail technique uniquement dans la console.
 - **Aucun secret** dans le code front ; les fichiers `.env` sont exclus du dépôt.
 - **Dépendances** : une seule (Vite), en version fixée, avec un `package-lock.json` versionné.

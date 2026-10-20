@@ -4,15 +4,131 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="DAYOUT compose ta sortie à Paris selon ton budget, ton temps et tes envies." />
+    <meta name="theme-color" content="#0b3d91" />
     <title>DAYOUT · Ta sortie à petit budget</title>
+    <link rel="stylesheet" href="/src/styles/main.css" />
   </head>
   <body>
-    <main>
-      <h1>DAYOUT</h1>
-      <p>Base technique : l'interface arrive à l'étape suivante.</p>
-      <!-- aria-live : les lecteurs d'écran annoncent le changement de texte -->
-      <p id="catalog-status" aria-live="polite">Chargement du catalogue…</p>
+    <a class="skip-link" href="#plan">Aller au formulaire</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="logo" href="#top" aria-label="DAYOUT, retour en haut de page">
+          <span class="logo__badge" aria-hidden="true">D</span>
+          <span class="logo__text">DAYOUT</span>
+        </a>
+        <p class="demo-badge">Démo · lieux fictifs</p>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- Présentation -->
+      <section class="hero">
+        <div class="container hero__inner">
+          <div class="hero__text">
+            <p class="eyebrow">Paris · petits budgets</p>
+            <h1 class="hero__title">Tu ne sais pas quoi faire&nbsp;? On trace ta sortie.</h1>
+            <p class="hero__lead">
+              Indique ton budget, ton temps et tes envies : DAYOUT compose un parcours de plusieurs étapes proches les
+              unes des autres, sans dépasser ce que tu veux dépenser.
+            </p>
+            <a class="button button--primary button--large" href="#plan">Composer ma sortie</a>
+          </div>
+
+          <!-- Illustration : une sortie présentée comme une ligne de métro -->
+          <ol class="hero-line" aria-hidden="true">
+            <li class="hero-line__station" data-category="thrift">
+              <span class="hero-line__dot"></span><span class="hero-line__name">Friperie</span><span class="hero-line__price">0&nbsp;€</span>
+            </li>
+            <li class="hero-line__station" data-category="gaming">
+              <span class="hero-line__dot"></span><span class="hero-line__name">Arcade</span><span class="hero-line__price">6&nbsp;€</span>
+            </li>
+            <li class="hero-line__station" data-category="food">
+              <span class="hero-line__dot"></span><span class="hero-line__name">Street food</span><span class="hero-line__price">8&nbsp;€</span>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Formulaire -->
+      <section class="section" id="plan" aria-labelledby="plan-title">
+        <div class="container container--narrow">
+          <h2 class="section__title" id="plan-title">Ta sortie, tes règles</h2>
+          <p class="section__lead">Tous les montants sont par personne.</p>
+
+          <!-- novalidate : la validation est faite par notre code, avec des messages en français -->
+          <form id="outing-form" class="form" novalidate>
+            <fieldset class="field" data-field="budgetEur" aria-describedby="error-budget">
+              <legend class="field__legend"><span class="field__number">1</span> Ton budget maximum</legend>
+              <div class="chips" data-options="budget"></div>
+              <div class="custom-input" id="budget-custom" hidden>
+                <label for="budget-custom-input">Montant en euros</label>
+                <input id="budget-custom-input" name="budgetCustom" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex. : 25" />
+              </div>
+              <p class="field-error" id="error-budget" hidden></p>
+            </fieldset>
+
+            <fieldset class="field" data-field="availableMinutes" aria-describedby="error-duration">
+              <legend class="field__legend"><span class="field__number">2</span> Ton temps disponible</legend>
+              <div class="chips" data-options="duration"></div>
+              <p class="field-error" id="error-duration" hidden></p>
+            </fieldset>
+
+            <fieldset class="field" data-field="categories" aria-describedby="error-categories">
+              <legend class="field__legend"><span class="field__number">3</span> Tes envies</legend>
+              <p class="field__hint">Choisis-en une ou plusieurs.</p>
+              <div class="category-grid" data-options="categories"></div>
+              <p class="field-error" id="error-categories" hidden></p>
+            </fieldset>
+
+            <fieldset class="field" data-field="audience" aria-describedby="error-audience">
+              <legend class="field__legend"><span class="field__number">4</span> Avec qui&nbsp;?</legend>
+              <div class="chips" data-options="audience"></div>
+              <p class="field-error" id="error-audience" hidden></p>
+            </fieldset>
+
+            <fieldset class="field" data-field="arrondissement" aria-describedby="error-arrondissement">
+              <legend class="field__legend"><span class="field__number">5</span> Où&nbsp;?</legend>
+              <label class="field__hint" for="arrondissement">Arrondissement de départ</label>
+              <select class="select" id="arrondissement" name="arrondissement"></select>
+              <label class="checkbox">
+                <input type="checkbox" name="hasNavigo" />
+                <span>J'ai un pass Navigo (les trajets en métro ne comptent pas dans le budget)</span>
+              </label>
+              <p class="field-error" id="error-arrondissement" hidden></p>
+            </fieldset>
+
+            <div class="form__actions">
+              <button class="button button--primary button--large" type="submit" disabled>Générer ma sortie</button>
+              <p id="load-status" class="load-status" role="status">Chargement des activités…</p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Résultats (affichés après la première génération) -->
+      <section class="section section--results" id="results" aria-labelledby="results-title" hidden>
+        <div class="container container--narrow">
+          <h2 class="section__title" id="results-title" tabindex="-1">Ta sortie à Paris</h2>
+          <div id="results-content"></div>
+          <div class="results__actions">
+            <button class="button button--primary" type="button" id="regenerate">Générer une autre sortie</button>
+            <button class="button button--secondary" type="button" id="edit-criteria">Modifier mes critères</button>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          DAYOUT est un projet étudiant. Les lieux, prix et durées affichés sont des
+          <strong>données de démonstration fictives</strong>.
+        </p>
+        <p><a href="https://github.com/Bighand2/dayout" rel="noopener noreferrer">Code source sur GitHub</a></p>
+      </div>
+    </footer>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
