@@ -6,6 +6,13 @@ DAYOUT est une application web qui compose automatiquement une **sortie à Paris
 
 L'objectif n'est pas d'afficher un catalogue de lieux, mais de proposer un **parcours cohérent en plusieurs étapes**, proches les unes des autres, avec un coût total estimé qui ne dépasse jamais le budget indiqué.
 
+**🌐 Site en ligne : [dayout-paris.netlify.app](https://dayout-paris.netlify.app/)**
+
+| Analyse | Résultat |
+|---|---|
+| [Mozilla HTTP Observatory](https://developer.mozilla.org/en-US/observatory) (sécurité) | **A+**, 130/100, 12 tests sur 12 réussis |
+| [PageSpeed Insights](https://pagespeed.web.dev) (mobile) | Performance **100** · Accessibilité **100** · SEO **100** |
+
 > ⚠️ **Données de démonstration.** Les lieux, prix et durées du catalogue actuel sont **fictifs**. Ils servent uniquement à faire fonctionner et à tester l'application.
 
 ## État du projet
@@ -15,7 +22,7 @@ L'objectif n'est pas d'afficher un catalogue de lieux, mais de proposer un **par
 | 1 | Base du projet, modèle de données, catalogue de démonstration validé et testé | ✅ Terminé |
 | 2 | Moteur de génération des sorties (fonction pure et testée) | ✅ Terminé |
 | 3 | Interface : page d'accueil, formulaire, page de résultats, responsive | ✅ Terminé |
-| 4 | Finitions de la V1 : en-têtes de sécurité, audit Lighthouse, mise en ligne sur Netlify | 🔄 En cours |
+| 4 | Finitions de la V1 : en-têtes de sécurité, audits, mise en ligne sur Netlify | ✅ Terminé |
 
 ## Stack technique
 
@@ -196,7 +203,7 @@ Le site est hébergé sur **Netlify**, relié au dépôt GitHub : chaque `git pu
 
 | En-tête | Rôle |
 |---|---|
-| `Content-Security-Policy` | Seuls les scripts, styles, polices et données du site lui-même sont autorisés : un script injecté ou externe est bloqué. Interdit aussi l'affichage du site dans une autre page (`frame-ancestors 'none'`, contre le *clickjacking*) |
+| `Content-Security-Policy` | Tout est interdit par défaut (`default-src 'none'`), puis seuls les scripts, styles, polices, images et données **du site lui-même** sont autorisés : un script injecté ou externe est bloqué. Interdit l'affichage du site dans une autre page (`frame-ancestors 'none'`, contre le *clickjacking*). Active les **Trusted Types** : le navigateur refuse toute écriture de texte brut dans `innerHTML`, `eval`… (protection contre les XSS basées sur le DOM) |
 | `X-Content-Type-Options: nosniff` | Le navigateur respecte le type annoncé d'un fichier sans le deviner |
 | `X-Frame-Options: DENY` | Équivalent ancien de `frame-ancestors`, pour les vieux navigateurs |
 | `Referrer-Policy` | Seule l'origine du site est transmise aux sites visités |
@@ -204,9 +211,11 @@ Le site est hébergé sur **Netlify**, relié au dépôt GitHub : chaque `git pu
 | `Cross-Origin-Opener-Policy` | Isole la page des fenêtres ouvertes par d'autres sites |
 | `Strict-Transport-Security` | Le navigateur n'utilise plus que HTTPS. Ajouté automatiquement par Netlify (`max-age=31536000; includeSubDomains; preload`), donc absent de `_headers` |
 
-La CSP est stricte (aucun `'unsafe-inline'`) : le code n'utilise ni script en ligne, ni attribut `style`, ni `innerHTML`. Elle a été vérifiée en local avec `npm run preview` : aucune violation en utilisant le site.
+La CSP est stricte (aucun `'unsafe-inline'`) : le code n'utilise ni script en ligne, ni attribut `style`, ni `innerHTML`. Elle a été vérifiée en local avec `npm run preview` puis en production : aucune violation en utilisant le site.
 
-**Audit Lighthouse** (version de production locale) : Accessibilité 100, Bonnes pratiques 100, SEO 100, sur mobile et ordinateur. La performance sera mesurée sur le site en ligne.
+**Code injecté par l'hébergeur.** Netlify ajoute à la volée un badge « Powered by Netlify » sur les projets gratuits (script `/.netlify/scripts/hud`, qui crée une iframe avec du style et du script en ligne). La CSP le bloque, ce qui provoquait des erreurs dans la console. Le badge a été désactivé dans *Project configuration > General > Powered by Netlify badge*. Bon exemple de ce que garantit une CSP : seul le code choisi par le développeur s'exécute, y compris face à l'hébergeur.
+
+**Performance.** Le catalogue est préchargé (`<link rel="preload">`) pour être téléchargé en parallèle du JavaScript. La feuille de style reste « bloquante » (5,5 Ko, environ 140 ms) : l'intégrer directement dans le HTML exigerait d'autoriser les styles en ligne dans la CSP, un compromis refusé ici au profit de la sécurité.
 
 ## Sécurité
 

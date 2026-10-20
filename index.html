@@ -9,6 +9,9 @@
     <title>DAYOUT · Ta sortie à petit budget</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/src/styles/main.css" />
+    <!-- Préchargement : le catalogue est demandé dès la lecture du HTML, en parallèle du JavaScript,
+         au lieu d'attendre que le script démarre (gain sur la « chaîne de requêtes critiques »). -->
+    <link rel="preload" href="/data/activities.json" as="fetch" crossorigin />
   </head>
   <body>
     <a class="skip-link" href="#plan">Aller au formulaire</a>

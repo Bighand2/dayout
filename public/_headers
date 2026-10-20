@@ -1,11 +1,16 @@
 # En-têtes HTTP de sécurité, au format Netlify.
 # Appliqués par Netlify en production, et par `npm run preview` en local (voir vite.config.js).
 #
-# Content-Security-Policy (CSP) : le navigateur ne charge et n'exécute QUE ce qui vient du site
-#   lui-même ('self'). Un script injecté (XSS) ou chargé depuis un autre domaine serait bloqué.
-#   object-src 'none' : pas de plugins ; base-uri 'self' : pas de détournement des liens relatifs ;
-#   form-action 'none' : le formulaire n'envoie rien à un serveur ; frame-ancestors 'none' : le site
-#   ne peut pas être affiché dans une autre page (protection contre le « clickjacking »).
+# Content-Security-Policy (CSP) : tout est interdit par défaut (default-src 'none'), puis on autorise
+#   type par type ce dont le site a besoin, uniquement depuis le site lui-même ('self').
+#   Un script injecté (XSS) ou chargé depuis un autre domaine serait bloqué.
+#   base-uri 'self' : pas de détournement des liens relatifs ; form-action 'none' : le formulaire
+#   n'envoie rien à un serveur ; frame-ancestors 'none' : le site ne peut pas être affiché dans une
+#   autre page (protection contre le « clickjacking »).
+#   Trusted Types (require-trusted-types-for 'script' + trusted-types 'none') : le navigateur refuse
+#   toute écriture de texte brut dans une fonction dangereuse (innerHTML, outerHTML, eval…), même si
+#   un développeur l'ajoutait par erreur plus tard. C'est la protection contre les XSS « basées sur
+#   le DOM ». Possible ici parce que le code n'utilise aucune de ces fonctions (voir src/ui/dom.js).
 # X-Content-Type-Options : le navigateur respecte le type annoncé d'un fichier, sans le deviner.
 # X-Frame-Options : équivalent ancien de frame-ancestors, pour les vieux navigateurs.
 # Referrer-Policy : seule l'origine du site est transmise aux sites visités, jamais l'adresse complète.
@@ -15,7 +20,7 @@
 # plus forte (includeSubDomains; preload), pour toutes les adresses en .netlify.app.
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; require-trusted-types-for 'script'; trusted-types 'none'
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
