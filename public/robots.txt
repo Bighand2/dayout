@@ -1,0 +1,3 @@
+# Les moteurs de recherche peuvent indexer tout le site.
+User-agent: *
+Allow: /

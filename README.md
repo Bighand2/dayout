@@ -15,7 +15,7 @@ L'objectif n'est pas d'afficher un catalogue de lieux, mais de proposer un **par
 | 1 | Base du projet, modèle de données, catalogue de démonstration validé et testé | ✅ Terminé |
 | 2 | Moteur de génération des sorties (fonction pure et testée) | ✅ Terminé |
 | 3 | Interface : page d'accueil, formulaire, page de résultats, responsive | ✅ Terminé |
-| 4 | Finitions de la V1 : accessibilité, cas limites, mise en ligne | ⏳ À venir |
+| 4 | Finitions de la V1 : en-têtes de sécurité, audit Lighthouse, mise en ligne sur Netlify | 🔄 En cours |
 
 ## Stack technique
 
@@ -56,14 +56,19 @@ Ouvrir ensuite l'adresse affichée dans le terminal (par défaut http://localhos
 | `npm test` | Lance les tests automatisés |
 | `npm run demo` | Génère deux sorties dans le terminal (préférences modifiables dans `scripts/demo-generator.js`) |
 | `npm run build` | Produit la version optimisée dans `dist/` |
-| `npm run preview` | Sert localement la version de `dist/` pour la vérifier |
+| `npm run preview` | Sert localement la version de `dist/`, **avec les mêmes en-têtes de sécurité qu'en production** |
 
 ## Structure du projet
 
 ```text
 .
 ├── index.html                    Page unique de l'application
-├── public/
+├── netlify.toml                  Déploiement : tests, construction, dossier publié
+├── vite.config.js                Applique les en-têtes de production à `npm run preview`
+├── public/                       Fichiers copiés tels quels dans le site final
+│   ├── _headers                  En-têtes HTTP de sécurité (CSP…) au format Netlify
+│   ├── robots.txt                Consignes pour les moteurs de recherche
+│   ├── favicon.svg               Icône de l'onglet
 │   └── data/
 │       └── activities.json       Catalogue d'activités (démonstration)
 ├── src/
@@ -181,6 +186,27 @@ Le générateur (`src/engine/generator.js`) est une **fonction pure** : il reço
 | **Échec** | Le générateur renvoie un code (`BUDGET_TOO_LOW`, `TIME_TOO_SHORT`…) avec, si possible, le budget ou la durée minimale nécessaire |
 
 Les poids de la note (`SCORE_WEIGHTS`) et les réglages (`GENERATOR_SETTINGS`) sont regroupés en tête du fichier pour pouvoir ajuster les priorités sans toucher à la logique. Les hypothèses de trajet se trouvent dans `src/config/transport.js`.
+
+## Mise en ligne
+
+Le site est hébergé sur **Netlify**, relié au dépôt GitHub : chaque `git push` sur `main` déclenche un nouveau déploiement.
+
+- `netlify.toml` lance **les tests puis la construction** (`npm test && npm run build`) : si un test échoue, la nouvelle version n'est pas publiée.
+- `public/_headers` définit les **en-têtes HTTP de sécurité**. Netlify permet de les configurer, contrairement à GitHub Pages, ce qui a motivé le choix de l'hébergeur.
+
+| En-tête | Rôle |
+|---|---|
+| `Content-Security-Policy` | Seuls les scripts, styles, polices et données du site lui-même sont autorisés : un script injecté ou externe est bloqué. Interdit aussi l'affichage du site dans une autre page (`frame-ancestors 'none'`, contre le *clickjacking*) |
+| `X-Content-Type-Options: nosniff` | Le navigateur respecte le type annoncé d'un fichier sans le deviner |
+| `X-Frame-Options: DENY` | Équivalent ancien de `frame-ancestors`, pour les vieux navigateurs |
+| `Referrer-Policy` | Seule l'origine du site est transmise aux sites visités |
+| `Permissions-Policy` | Caméra, micro, géolocalisation et paiement désactivés (inutiles au site) |
+| `Cross-Origin-Opener-Policy` | Isole la page des fenêtres ouvertes par d'autres sites |
+| `Strict-Transport-Security` | Le navigateur n'utilise plus que HTTPS. Ajouté automatiquement par Netlify (`max-age=31536000; includeSubDomains; preload`), donc absent de `_headers` |
+
+La CSP est stricte (aucun `'unsafe-inline'`) : le code n'utilise ni script en ligne, ni attribut `style`, ni `innerHTML`. Elle a été vérifiée en local avec `npm run preview` : aucune violation en utilisant le site.
+
+**Audit Lighthouse** (version de production locale) : Accessibilité 100, Bonnes pratiques 100, SEO 100, sur mobile et ordinateur. La performance sera mesurée sur le site en ligne.
 
 ## Sécurité
 

@@ -1,0 +1,10 @@
+# Configuration Netlify : comment construire et publier le site.
+# Les en-têtes de sécurité sont dans public/_headers (copié dans dist/ à la construction).
+
+[build]
+  # Les tests passent AVANT la construction : si un test échoue, le site n'est pas mis en ligne.
+  command = "npm test && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"

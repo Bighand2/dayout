@@ -1,0 +1,28 @@
+# En-têtes HTTP de sécurité, au format Netlify.
+# Appliqués par Netlify en production, et par `npm run preview` en local (voir vite.config.js).
+#
+# Content-Security-Policy (CSP) : le navigateur ne charge et n'exécute QUE ce qui vient du site
+#   lui-même ('self'). Un script injecté (XSS) ou chargé depuis un autre domaine serait bloqué.
+#   object-src 'none' : pas de plugins ; base-uri 'self' : pas de détournement des liens relatifs ;
+#   form-action 'none' : le formulaire n'envoie rien à un serveur ; frame-ancestors 'none' : le site
+#   ne peut pas être affiché dans une autre page (protection contre le « clickjacking »).
+# X-Content-Type-Options : le navigateur respecte le type annoncé d'un fichier, sans le deviner.
+# X-Frame-Options : équivalent ancien de frame-ancestors, pour les vieux navigateurs.
+# Referrer-Policy : seule l'origine du site est transmise aux sites visités, jamais l'adresse complète.
+# Permissions-Policy : DAYOUT n'utilise ni caméra, ni micro, ni position : on les désactive.
+# Cross-Origin-Opener-Policy : isole la page des fenêtres ouvertes par d'autres sites.
+# HSTS (Strict-Transport-Security) n'est pas défini ici : Netlify l'ajoute déjà, dans une version
+# plus forte (includeSubDomains; preload), pour toutes les adresses en .netlify.app.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+
+# Fichiers construits par Vite : leur nom contient une empreinte (ex. index-BSTqYCGZ.js),
+# ils ne changent jamais, le navigateur peut donc les garder en cache un an.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
