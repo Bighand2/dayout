@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="DAYOUT compose ta sortie à Paris selon ton budget, ton temps et tes envies." />
     <meta name="theme-color" content="#0b3d91" />
+    <meta name="color-scheme" content="light dark" />
     <title>DAYOUT · Ta sortie à petit budget</title>
     <link rel="stylesheet" href="/src/styles/main.css" />
   </head>
@@ -26,33 +27,61 @@
       <section class="hero">
         <div class="container hero__inner">
           <div class="hero__text">
-            <p class="eyebrow">Paris · petits budgets</p>
-            <h1 class="hero__title">Tu ne sais pas quoi faire&nbsp;? On trace ta sortie.</h1>
+            <p class="eyebrow">Paris · petits budgets · sans inscription</p>
+            <h1 class="hero__title">
+              Tu ne sais pas quoi faire&nbsp;? On trace <span class="highlight">ta sortie</span>.
+            </h1>
             <p class="hero__lead">
               Indique ton budget, ton temps et tes envies : DAYOUT compose un parcours de plusieurs étapes proches les
               unes des autres, sans dépasser ce que tu veux dépenser.
             </p>
-            <a class="button button--primary button--large" href="#plan">Composer ma sortie</a>
+            <div class="hero__actions">
+              <a class="button button--accent button--large" href="#plan" data-icon="sparkles">Composer ma sortie</a>
+              <p class="hero__note">Gratuit, en moins d'une minute.</p>
+            </div>
           </div>
 
-          <!-- Illustration : une sortie présentée comme une ligne de métro -->
-          <ol class="hero-line" aria-hidden="true">
-            <li class="hero-line__station" data-category="thrift">
-              <span class="hero-line__dot"></span><span class="hero-line__name">Friperie</span><span class="hero-line__price">0&nbsp;€</span>
-            </li>
-            <li class="hero-line__station" data-category="gaming">
-              <span class="hero-line__dot"></span><span class="hero-line__name">Arcade</span><span class="hero-line__price">6&nbsp;€</span>
-            </li>
-            <li class="hero-line__station" data-category="food">
-              <span class="hero-line__dot"></span><span class="hero-line__name">Street food</span><span class="hero-line__price">8&nbsp;€</span>
-            </li>
-          </ol>
+          <!-- Illustration décorative : un mini plan de métro dont le trajet se dessine. -->
+          <div class="hero-map" aria-hidden="true">
+            <svg class="hero-map__svg" viewBox="0 0 480 380" focusable="false">
+              <g class="hero-map__lines">
+                <path data-category="thrift" d="M -10 90 H 140 L 220 170 H 490" />
+                <path data-category="gaming" d="M 100 390 V 290 L 220 170 V -10" />
+                <path data-category="culture" d="M -10 330 H 160 L 210 380" />
+                <path data-category="nature" d="M 390 390 V 300 L 450 240 V -10" />
+                <path data-category="sport" d="M 300 -10 V 50 L 360 110 H 490" />
+              </g>
+              <path class="hero-map__route hero-map__route--first" data-category="thrift" d="M 60 90 H 140 L 220 170" pathLength="1" />
+              <path class="hero-map__route hero-map__route--second" data-category="gaming" d="M 220 170 L 100 290" pathLength="1" />
+
+              <g class="hero-map__stop hero-map__stop--1" data-category="thrift">
+                <circle cx="60" cy="90" r="11" />
+                <rect x="38" y="30" width="150" height="34" rx="17" />
+                <text x="56" y="53">Friperie · 0 €</text>
+              </g>
+              <g class="hero-map__stop hero-map__stop--2" data-category="gaming">
+                <circle cx="220" cy="170" r="13" />
+                <rect x="246" y="153" width="138" height="34" rx="17" />
+                <text x="264" y="176">Arcade · 6 €</text>
+              </g>
+              <g class="hero-map__stop hero-map__stop--3" data-category="food">
+                <circle cx="100" cy="290" r="11" />
+                <rect x="126" y="273" width="176" height="34" rx="17" />
+                <text x="144" y="296">Street food · 8 €</text>
+              </g>
+              <g class="hero-map__total">
+                <rect x="290" y="316" width="170" height="44" rx="12" />
+                <text x="306" y="344">Total : 14 € · 3 h 30</text>
+              </g>
+            </svg>
+          </div>
         </div>
       </section>
 
       <!-- Formulaire -->
       <section class="section" id="plan" aria-labelledby="plan-title">
         <div class="container container--narrow">
+          <p class="eyebrow">Ton itinéraire en 5 arrêts</p>
           <h2 class="section__title" id="plan-title">Ta sortie, tes règles</h2>
           <p class="section__lead">Tous les montants sont par personne.</p>
 
@@ -99,7 +128,9 @@
             </fieldset>
 
             <div class="form__actions">
-              <button class="button button--primary button--large" type="submit" disabled>Générer ma sortie</button>
+              <button class="button button--accent button--large" type="submit" data-icon="sparkles" disabled>
+                Générer ma sortie
+              </button>
               <p id="load-status" class="load-status" role="status">Chargement des activités…</p>
             </div>
           </form>
@@ -109,23 +140,37 @@
       <!-- Résultats (affichés après la première génération) -->
       <section class="section section--results" id="results" aria-labelledby="results-title" hidden>
         <div class="container container--narrow">
+          <p class="eyebrow">Ton parcours</p>
           <h2 class="section__title" id="results-title" tabindex="-1">Ta sortie à Paris</h2>
           <div id="results-content"></div>
           <div class="results__actions">
-            <button class="button button--primary" type="button" id="regenerate">Générer une autre sortie</button>
-            <button class="button button--secondary" type="button" id="edit-criteria">Modifier mes critères</button>
+            <button class="button button--primary" type="button" id="regenerate" data-icon="shuffle">
+              Générer une autre sortie
+            </button>
+            <button class="button button--secondary" type="button" id="edit-criteria" data-icon="edit">
+              Modifier mes critères
+            </button>
           </div>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <div class="container">
-        <p>
-          DAYOUT est un projet étudiant. Les lieux, prix et durées affichés sont des
-          <strong>données de démonstration fictives</strong>.
+      <div class="container site-footer__inner">
+        <p class="logo logo--footer">
+          <span class="logo__badge" aria-hidden="true">D</span>
+          <span class="logo__text">DAYOUT</span>
         </p>
-        <p><a href="https://github.com/Bighand2/dayout" rel="noopener noreferrer">Code source sur GitHub</a></p>
+        <div>
+          <p>
+            Projet étudiant. Les lieux, prix et durées affichés sont des
+            <strong>données de démonstration fictives</strong>.
+          </p>
+          <p>
+            <a href="https://github.com/Bighand2/dayout" rel="noopener noreferrer">Code source sur GitHub</a>
+            · Icônes <a href="https://lucide.dev" rel="noopener noreferrer">Lucide</a> · Police Bricolage Grotesque (OFL)
+          </p>
+        </div>
       </div>
     </footer>
 

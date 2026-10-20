@@ -2,10 +2,13 @@
  * Point d'entrée : relie les données, le formulaire, le générateur et l'affichage.
  * Aucune logique métier ici, seulement l'enchaînement des étapes et l'état de la page.
  */
+// Police des titres, hébergée avec le site (aucune requête vers un service tiers).
+import '@fontsource-variable/bricolage-grotesque';
 import { loadActivities } from './data/activityRepository.js';
 import { generateOuting } from './engine/generator.js';
 import { setupForm } from './ui/form.js';
 import { renderOutcome, renderError } from './ui/results.js';
+import { addStaticIcons } from './ui/icons.js';
 
 const form = document.querySelector('#outing-form');
 const submitButton = form.querySelector('button[type="submit"]');
@@ -25,6 +28,7 @@ const state = {
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+addStaticIcons();
 setupForm(form, {
   onValidSubmit(preferences) {
     state.preferences = preferences;

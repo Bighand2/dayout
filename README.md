@@ -25,6 +25,8 @@ L'objectif n'est pas d'afficher un catalogue de lieux, mais de proposer un **par
 | [Vite](https://vite.dev) 8 | Serveur de développement et compilation | Rechargement automatique et production d'une version optimisée ; ce n'est pas un framework |
 | JSON | Catalogue d'activités | Simple à modifier ; l'accès aux données est isolé dans un seul module pour passer plus tard à une API |
 | `node:test` | Tests automatisés | Intégré à Node.js, aucune dépendance supplémentaire |
+| [Lucide](https://lucide.dev) (ISC) | Icônes SVG | Rendu identique sur tous les systèmes (contrairement aux emojis) ; seules les icônes utilisées sont embarquées |
+| [Bricolage Grotesque](https://github.com/ateliertriay/bricolage) (OFL), via Fontsource | Police des titres | Hébergée avec le site : aucune requête vers un service tiers comme Google Fonts |
 
 Évolution prévue : une **API Node.js + Express** avec une base **SQLite** (V2), qui réutilisera le même moteur de génération sans réécriture.
 
@@ -84,6 +86,7 @@ Ouvrir ensuite l'adresse affichée dans le terminal (par défaut http://localhos
 │   │   ├── results.js            Affichage de la sortie en « ligne de métro »
 │   │   ├── messages.js           Codes du générateur → phrases pour l'utilisateur
 │   │   ├── format.js             Mise en forme des prix, durées, trajets
+│   │   ├── icons.js              Icônes Lucide utilisées par l'interface
 │   │   └── dom.js                Création d'éléments HTML sans innerHTML
 │   └── styles/
 │       └── main.css              Styles (variables, composants, responsive)
@@ -96,7 +99,11 @@ Ouvrir ensuite l'adresse affichée dans le terminal (par défaut http://localhos
 
 ## Interface
 
-Une seule page qui défile : présentation, formulaire, puis résultats. La direction artistique s'inspire d'un **plan de métro** : chaque étape est une station, et chaque catégorie a sa couleur de ligne.
+Une seule page qui défile : présentation, formulaire, puis résultats. La direction artistique s'inspire d'un **plan de métro** : chaque étape est une station, chaque catégorie a sa couleur de ligne, le fond rappelle un plan quadrillé et le résumé d'une sortie prend la forme d'un ticket jaune.
+
+- **Présentation** : mini plan de métro en SVG dont le trajet se dessine à l'ouverture de la page.
+- **Thèmes** : clair ou sombre selon le réglage du système, grâce à des variables CSS (seules les variables changent d'un thème à l'autre).
+- **Animations** : la ligne et les stations apparaissent l'une après l'autre ; tout est désactivé si l'utilisateur a demandé à réduire les animations.
 
 - **Formulaire** : boutons de valeurs prédéfinies (budget avec un montant libre « Autre », temps disponible, public), cartes d'envies à cocher, choix de l'arrondissement et option pass Navigo. Les erreurs s'affichent sous le champ concerné et le focus s'y place.
 - **Résultats** : résumé (budget, durée, nombre d'étapes), remarques du générateur, parcours étape par étape avec les trajets entre deux stations, lien vers la carte OpenStreetMap, bouton « Générer une autre sortie » qui évite toutes les activités déjà proposées depuis la dernière recherche.
@@ -186,7 +193,8 @@ Mesures déjà en place :
 - **Préférences revalidées** avant chaque génération, même si elles viennent de notre propre formulaire (le module sera réutilisé côté serveur en V2).
 - **Erreurs séparées** : un message clair pour l'utilisateur, et le détail technique uniquement dans la console.
 - **Aucun secret** dans le code front ; les fichiers `.env` sont exclus du dépôt.
-- **Dépendances** : une seule (Vite), en version fixée, avec un `package-lock.json` versionné.
+- **Dépendances** : trois seulement (Vite pour le développement, Lucide et la police pour le site), en versions exactes, avec un `package-lock.json` versionné. Une version n'est adoptée qu'après environ deux semaines de publication, pour limiter le risque de paquet piégé (attaque de la chaîne d'approvisionnement).
+- **Pas de ressource externe** : police et icônes sont servies par le site lui-même ; aucune donnée des visiteurs (adresse IP, page visitée) n'est transmise à un tiers au chargement.
 
 ## Limites connues
 

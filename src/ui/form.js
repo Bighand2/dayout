@@ -16,6 +16,7 @@ import {
 import { validatePreferences } from '../engine/preferences.js';
 import { formatArrondissement, formatDuration, formatEuros } from './format.js';
 import { el } from './dom.js';
+import { icon } from './icons.js';
 
 const CUSTOM_BUDGET = 'custom';
 
@@ -86,19 +87,22 @@ function renderOptions(form) {
   );
 
   form.querySelector('[data-options="categories"]').replaceChildren(
-    ...CATEGORIES.map(({ code, label, emoji }) =>
+    ...CATEGORIES.map(({ code, label }) =>
       el('label', { className: 'category-card', dataset: { category: code } }, [
         el('input', { attrs: { type: 'checkbox', name: 'categories', value: code } }),
         el('span', { className: 'category-card__body' }, [
-          el('span', { className: 'category-card__emoji', text: emoji, attrs: { 'aria-hidden': 'true' } }),
+          el('span', { className: 'category-card__icon' }, [icon(code, { size: 22 })]),
           el('span', { className: 'category-card__label', text: label }),
+          el('span', { className: 'category-card__check' }, [icon('check', { size: 16 })]),
         ]),
       ]),
     ),
   );
 
   form.querySelector('[data-options="audience"]').replaceChildren(
-    ...AUDIENCES.map(({ code, label }) => chip('radio', 'audience', code, label, code === DEFAULT_AUDIENCE)),
+    ...AUDIENCES.map(({ code, label }) =>
+      chip('radio', 'audience', code, label, code === DEFAULT_AUDIENCE, icon(code, { size: 18 })),
+    ),
   );
 
   form.querySelector('#arrondissement').replaceChildren(
@@ -109,11 +113,11 @@ function renderOptions(form) {
   );
 }
 
-/** Bouton de choix (radio ou case à cocher) stylé en « pastille ». */
-function chip(type, name, value, label, checked) {
+/** Bouton de choix (radio ou case à cocher) stylé en « pastille », avec une icône facultative. */
+function chip(type, name, value, label, checked, chipIcon = null) {
   return el('label', { className: 'chip' }, [
     el('input', { attrs: { type, name, value, checked } }),
-    el('span', { className: 'chip__label', text: label }),
+    el('span', { className: 'chip__label' }, [chipIcon, label]),
   ]);
 }
 
